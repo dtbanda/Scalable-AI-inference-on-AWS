@@ -21,9 +21,9 @@ This project showcases the deployment of Liquid AI SLM (Small Language Model) as
 Designed for AI product teams, startups, or researchers who want to host lightweight LLMs in a private cloud environment with full control over their data, costs, scalability, and API access.
 
 **This infrastructure simulates a real-world use case of a language model API:**
-> Replace OpenAI/Anthropic dependency
-> Run in regulated or air-gapped environments
-> Reduce costs for frequent inference workloads
+- Replace OpenAI/Anthropic dependency
+- Run in regulated or air-gapped environments
+- Reduce costs for frequent inference workloads
 
 ---
 
@@ -49,8 +49,8 @@ Designed for AI product teams, startups, or researchers who want to host lightwe
 ## 🚀 Deployment Overview (Sensitive information redacted)
 
 1. **Build & Push Docker Image**
-  > docker build -t slm-api.
-  > docker run -p 8000:8000 slm-api
+   > docker build -t slm-api.
+   > docker run -p 8000:8000 slm-api
   
 2. **Provision AWS Infrastructure**
    Configure AWS CLI
