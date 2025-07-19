@@ -53,8 +53,8 @@ Designed for AI product teams, startups, or researchers who want to host lightwe
    > docker run -p 8000:8000 slm-api
   
 2. **Provision AWS Infrastructure**
-   Configure AWS CLI
-   Deploy EC2 + IAM roles + Security Group via Terraform
+   - Configure AWS CLI
+   - Deploy EC2 + IAM roles + Security Group via Terraform
    
    > terraform init && terraform apply
    
@@ -64,8 +64,8 @@ Designed for AI product teams, startups, or researchers who want to host lightwe
    > docker push <ecr-repo>
 
 5. **Deploy and Test API**
-   SSH into EC2, pull container, and run.
-   Test inference via curl or Postman:
+   - SSH into EC2, pull container, and run.
+   - Test inference via curl or Postman:
    
    > curl -X POST https://<your-domain>/generate \
    > -H "Content-Type: application/json" \
