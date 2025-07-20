@@ -1,0 +1,32 @@
+llm-aws-deployment/
+│
+├── api/                          # FastAPI app code
+│   ├── main.py                   # Entry point: /generate route
+│   ├── model_loader.py           # Loads the Liquid AI SLM model
+│   ├── inference.py              # Handles prompt → response logic
+│   └── utils.py                  # Any helper functions
+│
+├── docker/
+│   └── Dockerfile                # Docker setup for running the API
+│
+├── infrastructure/
+│   ├── main.tf                   # Terraform: EC2, IAM, Security Group
+│   ├── variables.tf              # TF variables
+│   ├── outputs.tf                # TF outputs (public IP, etc.)
+│   └── terraform.tfvars.example # Example values
+│
+├── scripts/
+│   ├── push_to_ecr.sh           # Script to push Docker image to AWS ECR
+│   └── deploy_model.sh          # Script to run API on EC2 after SSH
+│
+├── examples/
+│   ├── prompt_sample.json        # Example API request
+│   └── response_sample.json      # Example API response
+│
+├── .github/
+│   └── workflows/
+│       └── deploy.yml           # (Optional) GitHub Actions CI/CD
+│
+├── .gitignore
+├── README.md                    # 📄 Your detailed project documentation
+└── architecture.png             # 📊 Diagram image used in README
