@@ -48,32 +48,23 @@ Designed for AI product teams, startups, or researchers who want to host lightwe
 
 ## 🚀 Deployment Overview (Sensitive information redacted)
 
-1. **Build & Push Docker Image**
-   > docker build -t slm-api.
-   > docker run -p 8000:8000 slm-api
-  
-2. **Provision AWS Infrastructure**
+1. **Terraform run and docker hub image pull**
+Navigate to infrastructure directory in project. Run:
+   > terraform init
+   > terraform plan
+   > terraform apply
+This does the following:
+   - Starts up an AWS t4g.small EC2 instance.
    - Configure AWS CLI
    - Deploy EC2 + IAM roles + Security Group via Terraform
-   
-   > terraform init && terraform apply
-   
-4. **Push Docker Image to ECR**
-   > aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <repo-url>
-   > docker tag slm-api <ecr-repo>
-   > docker push <ecr-repo>
-
-5. **Deploy and Test API**
-   - SSH into EC2, pull container, and run.
-   - Test inference via curl or Postman:
-   
-   > curl -X POST https://<your-domain>/generate \
-   > -H "Content-Type: application/json" \
-   > -d '{"prompt": "Write a poem about the cloud."}'
+On start, the script user_data.sh is run.
+It pulls the Docker images from Docker Hub and runs the Docker container.
+   > docker pull dtbanda/slm-pi-app:arm64
+   > docker run -dp 8000:8000 dtbanda/slm-pi-app:arm64 
 
 🔐 Security & Cost Notes
 - Deployed in private VPC, with security groups restricting public traffic.
-- IAM roles limited to necessary services (ECR, S3, CloudWatch).
+- IAM roles are limited to necessary services (S3, CloudWatch).
 - Spot instances or Graviton-based EC2 options for cost reduction.
 - HTTPS enabled via AWS Certificate Manager (or self-signed in dev).
 
