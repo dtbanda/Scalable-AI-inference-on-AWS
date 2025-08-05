@@ -1,0 +1,11 @@
+# Ignore Terraform state files
+*.tfstate
+*.tfstate.backup
+
+# Ignore PEM keys
+infrastructure/devops-labs.pem
+
+# Optional: Ignore all .pem files
+*.pem
+
+

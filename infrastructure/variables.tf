@@ -8,10 +8,16 @@ variable "public_key_path" {
 }
 
 variable "ami_id" {
-  description = "Ubuntu AMI ID"
-  default     = "ami-005618638b1adde72" 
+  description = "Ubuntu arm64 machine"
+  default     = "ami-008e58f8f6505bf76" 
 }
 
 variable "instance_type" {
-  default = "t3.micro" # Use g4dn.xlarge if you want a GPU
+  default = "t4g.micro" #Graviton arm architecture
+}
+
+variable "instance_name" {
+  description = "Value of the Name tag for the EC2 instance"
+  type        = string
+  default     = "liquid_ai_lab"
 }

@@ -1,26 +1,27 @@
+# main.py
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
-from model_loader import model, tokenizer, streamer
-from inference import generate_response
+from run_model import generate_response
 
-app = FastAPI(
-    title="Liquid AI SLM API",
-    description="A FastAPI service for generating responses using Liquid AI's LFM2 model.",
-    version="1.0.0"
-)
+app = FastAPI()
 
-# Define request body
+# Input schema for POST
 class PromptRequest(BaseModel):
     prompt: str
 
-# Define response body
-class PromptResponse(BaseModel):
-    response: str
-
-@app.post("/generate", response_model=PromptResponse)
+# POST endpoint to generate a response from the model
+@app.post("/generate")
 async def generate(prompt_request: PromptRequest):
     try:
         response = generate_response(prompt_request.prompt)
         return {"response": response}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# GET endpoint to serve HTML page
+@app.get("/")
+async def serve_home():
+    with open ("index.html", "r") as f:
+        html = f.read()
+    return HTMLResponse(content=html)

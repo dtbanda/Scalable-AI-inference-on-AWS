@@ -1,7 +1,9 @@
-output "instance_public_ip" {
-  value = aws_instance.slm_instance.public_ip
+output "instance_id" {
+  description = "ID of the EC2 instance"
+  value       = aws_instance.app_server.id
 }
 
-output "ssh_command" {
-  value = "ssh -i ~/.ssh/your-key.pem ubuntu@${aws_instance.slm_instance.public_ip}"
+output "instance_public_ip" {
+  description = "Public IP address of the EC2 instance"
+  value       = aws_instance.app_server.public_ip
 }

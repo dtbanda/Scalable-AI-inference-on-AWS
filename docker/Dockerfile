@@ -1,27 +1,27 @@
-# Use official PyTorch image (includes Python, CUDA, etc.)
-FROM pytorch/pytorch:2.2.0-cuda11.8-cudnn8-runtime
+# Lightweight Python Image
+FROM python:3.10-slim
+
+# Set environment variables to reduce Python output noise
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
-# Install Linux packages
-RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy requirements first (for caching layer)
-COPY requirements.txt .
+# Copy your application code in the container
+COPY ./api /app
 
 # Install Python dependencies
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy app code
-COPY api/ ./api/
-COPY architecture.png ./
-
-# Expose API port
+# Expose the port for app 
 EXPOSE 8000
 
-# Run the app
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run app 
+# 6. Start the FastAPI app using uvicorn
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

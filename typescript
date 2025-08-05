@@ -1,0 +1,91 @@
+Script started on 2025-07-28 15:51:36+02:00 [TERM="xterm-256color" TTY="/dev/pts/4" COLUMNS="74" LINES="34"]
+[?2004h]0;dalitso@dalitso-Aspire-A515-51G: ~/AI-models/LiquidAI[01;32mdalitso@dalitso-Aspire-A515-51G[00m:[01;34m~/AI-models/LiquidAI[00m$ cd c[Kscripts/cr[K[K; s[Kls
+[?2004l[0m[01;32mdeploy_model.sh[0m  [01;32mpush_to_ecr.sh[0m  [01;32muser_data.sh[0m
+[?2004h]0;dalitso@dalitso-Aspire-A515-51G: ~/AI-models/LiquidAI/scripts[01;32mdalitso@dalitso-Aspire-A515-51G[00m:[01;34m~/AI-models/LiquidAI/scripts[00m$ cat deploy_model.sh 
+[?2004l#!/bin/bash
+# deploy_model.sh - builds, pushes and deploys the model
+
+set -e
+
+echo "Pushing Docker image to ECR..."
+./scripts/push_to_ecr.sh
+
+echo "Deploying infrastructure via Terraform..."
+cd infrastructure
+terraform init
+terraform apply -auto-approve
+
+echo "Deployment complete!"
+echo "Instance IP:"
+terraform output instance_public_ip
+echo "SSH command:"
+terraform output ssh_command
+[?2004h]0;dalitso@dalitso-Aspire-A515-51G: ~/AI-models/LiquidAI/scripts[01;32mdalitso@dalitso-Aspire-A515-51G[00m:[01;34m~/AI-models/LiquidAI/scripts[00m$ cat[Ka[Kt push_to_ecr.sh 
+[?2004l#!/bin/bash
+# push_to_ecr.sh - builds and pushes image to AWS ECR
+
+set -e
+
+REGION="us-east-1"
+ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+REPO_NAME="slm-api"
+IMAGE_TAG="latest"
+
+# Build Docker image
+docker build -t ${REPO_NAME}:${IMAGE_TAG} .
+
+# Tag image for ECR
+docker tag ${REPO_NAME}:${IMAGE_TAG} ${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/${REPO_NAME}:${IMAGE_TAG}
+
+# Login to ECR
+aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com
+
+# Create repo if it doesn’t exist
+aws ecr describe-repositories --repository-names "${REPO_NAME}" --region ${REGION} > /dev/null 2>&1 || \
+aws ecr create-repository --repository-name "${REPO_NAME}" --region ${REGION}
+
+# Push image
+docker push ${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/${REPO_NAME}:${IMAGE_TAG}
+[?2004h]0;dalitso@dalitso-Aspire-A515-51G: ~/AI-models/LiquidAI/scripts[01;32mdalitso@dalitso-Aspire-A515-51G[00m:[01;34m~/AI-models/LiquidAI/scripts[00m$ cd ..; ls
+[?2004l[0m[01;34mapi[0m                       file_structure_plan  requirements.txt
+[01;35marchitecture_diagram.png[0m  [01;34minfrastructure[0m       [01;34mscripts[0m
+[01;34mdocker[0m                    README.md            typescript
+[?2004h]0;dalitso@dalitso-Aspire-A515-51G: ~/AI-models/LiquidAI[01;32mdalitso@dalitso-Aspire-A515-51G[00m:[01;34m~/AI-models/LiquidAI[00m$ cd infrastructure/
+[?2004l[?2004h]0;dalitso@dalitso-Aspire-A515-51G: ~/AI-models/LiquidAI/infrastructure[01;32mdalitso@dalitso-Aspire-A515-51G[00m:[01;34m~/AI-models/LiquidAI/infrastructure[00m$ ls
+[?2004ldevops-labs.pem  output.tf          terraform.tfstate.backup
+main.tf          terraform.tfstate  variables.tf
+[?2004h]0;dalitso@dalitso-Aspire-A515-51G: ~/AI-models/LiquidAI/infrastructure[01;32mdalitso@dalitso-Aspire-A515-51G[00m:[01;34m~/AI-models/LiquidAI/infrastructure[00m$ cat m ain.tf 
+[?2004lterraform {
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 4.16"
+    }
+  }
+
+  required_version = ">= 1.2.0"
+}
+
+provider "aws" {
+  region = var.aws_region
+}
+
+resource "aws_instance" "app_server" {
+  ami                         = var.ami_id
+  instance_type               = var.instance_type
+  key_name                    = "devops-labs"
+  associate_public_ip_address = true
+
+  vpc_security_group_ids = ["sg-06a977bf6550bd675"]
+  
+  tags = {
+    Name = var.instance_name
+  }
+}
+[?2004h]0;dalitso@dalitso-Aspire-A515-51G: ~/AI-models/LiquidAI/infrastructure[01;32mdalitso@dalitso-Aspire-A515-51G[00m:[01;34m~/AI-models/LiquidAI/infrastructure[00m$ shur[Ktd own 
+[?2004lShutdown scheduled for Mon 2025-07-28 23:01:04 SAST, use 'shutdown -c' to cancel.
+[?2004h]0;dalitso@dalitso-Aspire-A515-51G: ~/AI-models/LiquidAI/infrastructure[01;32mdalitso@dalitso-Aspire-A515-51G[00m:[01;34m~/AI-models/LiquidAI/infrastructure[00m$ [?2004l
+exit
+
+Script done on 2025-07-28 23:01:06+02:00 [COMMAND_EXIT_CODE="0"]
