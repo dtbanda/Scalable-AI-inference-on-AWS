@@ -15,4 +15,4 @@ echo "Deployment complete!"
 echo "Instance IP:"
 terraform output instance_public_ip
 echo "SSH command:"
-terraform output ssh_command
+terraform output ssh_command 

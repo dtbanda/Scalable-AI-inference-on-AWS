@@ -9,11 +9,8 @@ apt-get install -y docker.io
 systemctl start docker
 systemctl enable docker
 
-# Login to ECR (assumes IAM role or keys are attached)
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <your_account_id>.dkr.ecr.us-east-1.amazonaws.com
-
-# Pull image from ECR
-docker pull <your_account_id>.dkr.ecr.us-east-1.amazonaws.com/slm-api:latest
+# Pull image from Docker Hub
+docker pull dtbanda/slm-pi-app:arm64
 
 # Run the container (port 8000 exposed)
-docker run -d -p 8000:8000 --name slm-api <your_account_id>.dkr.ecr.us-east-1.amazonaws.com/slm-api:latest
+docker run -dp 8000:8000 dtbanda/slm-pi-app:arm64

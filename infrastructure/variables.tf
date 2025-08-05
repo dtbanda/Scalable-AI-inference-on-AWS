@@ -13,7 +13,7 @@ variable "ami_id" {
 }
 
 variable "instance_type" {
-  default = "t4g.micro" #Graviton arm architecture
+  default = "t4g.small" #Graviton arm architecture
 }
 
 variable "instance_name" {

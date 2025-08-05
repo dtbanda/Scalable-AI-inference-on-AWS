@@ -21,6 +21,8 @@ resource "aws_instance" "app_server" {
   associate_public_ip_address = true
 
   vpc_security_group_ids = [aws_security_group.allow_ssh_docker_app.id]
+
+  user_data = file("${path.module}/../scripts/user_data.sh")
   
   tags = {
     Name = var.instance_name

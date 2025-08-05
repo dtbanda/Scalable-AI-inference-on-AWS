@@ -24,4 +24,4 @@ EXPOSE 8000
 
 # Run app 
 # 6. Start the FastAPI app using uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--worker", "1", "timeout-keep-alive", "5"]
